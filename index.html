@@ -1,0 +1,73 @@
+<html>
+<head>
+	<title>Current Games</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  	<style>
+
+		.bio{
+			border: solid black 3px;
+		}
+		.stat_text {
+			font-size: 60%;
+			margin-top: 0px;
+			margin-bottom: 4px;
+		}
+
+		.stat_place {
+			font-size: 70%;
+		}
+
+		.btn-small {
+			font-size: 50%;
+	    	height: 24px;
+		    line-height: 24px;
+		    padding: 0 0.5rem;
+		}
+		
+		.row_plot{
+			margin-bottom: 0px;
+		}
+		/*TODO    select child elements more efficently*/
+		.plot {
+			border: solid black 2px;
+			height: 75px;
+		}
+
+		.plot_inner_row {
+			border: 0px;
+		}
+  	</style>
+</head>
+<body>
+
+	<div class="container">
+		<ul class="collapsible" data-collapsible="accordion">
+			<li>
+				<div class="collapsible-header">
+					Lobby Name
+					<span class="new badge">4 slots open</span></div>
+				<div class="collapsible-body">
+					<p>Current Player</p>
+				</div>
+			</li>
+			<li>
+				<div class="collapsible-header">
+					<h5>Lobby Name</h5>
+					<span class="new badge">4 slots open</span></div>
+				<div class="collapsible-body">
+					<h5>Current Player</h5>
+				</div>
+			</li>
+		</ul>
+	</div> 
+
+
+
+	<script src="https://code.jquery.com/jquery.js"></script>
+<!-- 	<script type="text/javascript">
+		$(document).ready( function() {
+			$('.collapsible').collapsible();
+		});
+	</script>
+ --></body>
+</html>
