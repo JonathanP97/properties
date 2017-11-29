@@ -3,7 +3,7 @@
 	<title>Monopoly</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   	<style>
-
+ 
 		.bio{
 			border: solid black 3px;
 		}
@@ -30,7 +30,7 @@
 		/*TODO    select child elements more efficently*/
 		.plot {
 			border: solid black 2px;
-			height: 75px;
+			height: 120px;
 		}
 
 		.plot_inner_row {
@@ -42,10 +42,10 @@
 
 		<!-- Player Row -->	
 		<div class="row">
-			<div class="col s2 teal flow-text ">
+			<div class="col s2 flow-text ">
 				<div class="row">
-					<div class="col s12">
-						<h5 style="margin: 5px">Jonathan</h5>
+					<div class="col s12 teal">
+						<h5 style="margin: 8px">Jonathan</h5>
 						<div class="stat_box">
 							<p class="stat_text stat_place">2nd</p>
 							<p class="stat_text">Properties: 7</p>
@@ -58,9 +58,9 @@
 					</div>										
 				</div>
 			</div>
-			<div class="col s2 teal flow-text ">
+			<div class="col s2 flow-text ">
 				<div class="row">
-					<div class="col s12">
+					<div class="col s12 teal">
 						<h5 style="margin: 5px">Other</h5>
 						<div class="stat_box">
 							<p class="stat_text stat_place">1st</p>
@@ -139,85 +139,44 @@
 				</div>
 			</div>	
 		</div>
-		<br><br><br><br>
+		<br><br><br><br><br><br>
 		<div class="">
 		</div>
 
 		<!-- Map/Chatbox Row -->
 		<div class="row">
 
-			<div>
-				<div class="col s5 ">
-					
-					<div class="row row_plot">
-						<div class="col s3 plot red">
-						</div>
-						<div class="col s2 plot red">
-						</div>
-						<div class="col s2 plot">
-						</div>
-						<div class="col s2 plot">
-						</div>
-						<div class="col s3 plot">
-						</div>
-					</div>
-					<div class="row row_plot ">
-						<div class="col s3 plot">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s3 plot">
-						</div>
-					</div>
-					<div class="row row_plot">
-						<div class="col s3 plot">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s3 plot">
-						</div>
-					</div>
-					<div class="row row_plot">
-						<div class="col s3 plot">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s2 plot plot_inner_row">
-						</div>
-						<div class="col s3 plot">
-						</div>
-					</div>
-					<div class="row row_plot">
-						<div class="col s3 plot">
-						</div>
-						<div class="col s2 plot">
-						</div>
-						<div class="col s2 plot">
-						</div>
-						<div class="col s2 plot">
-						</div>
-						<div class="col s3 plot">
-						</div>
-					</div>
-				</div>
-				<div class="col s7 blue">
-					<p>chat box</p>
-					<p>show player details</p>
-				</div>
+			<div class="col s5 board_div">
+			</div>
+			<div class="col s7 blue">
+				<p>chat box</p>
+				<p>show player details</p>
 			</div>
 		</div>
 
-
 	<script src="https://code.jquery.com/jquery.js"></script>
+	<script type="text/javascript">
+
+		for(var i = 0; i<6; i++) {
+
+			var row = $("<div class='row row_plot'>");
+			for(var x = 0; x<6; x++) {
+
+				if(i === 0 || i === 5) {
+					var plot = $("<div class='col s2 plot red'>");					
+				} else {
+
+					if(x === 0 || x===5 ) {
+						var plot = $("<div class='col s2 plot red'>");
+					} else {
+						var plot = $("<div class='col s2'>");
+					}
+
+				}
+				row.append(plot);
+			}
+			$(".board_div").append(row);
+		}
+	</script>
 </body>
 </html>

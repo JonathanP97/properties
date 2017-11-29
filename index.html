@@ -2,72 +2,76 @@
 <head>
 	<title>Current Games</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  	<style>
-
-		.bio{
-			border: solid black 3px;
+	<style>
+		.center-align > p {
+			font-size: 180%;
 		}
-		.stat_text {
-			font-size: 60%;
-			margin-top: 0px;
-			margin-bottom: 4px;
+		.game_div {
+			padding: 3px;
 		}
-
-		.stat_place {
+		.game_div > p {
+			margin: 4px;
+		}
+		.player {
 			font-size: 70%;
 		}
-
-		.btn-small {
-			font-size: 50%;
-	    	height: 24px;
-		    line-height: 24px;
-		    padding: 0 0.5rem;
-		}
-		
-		.row_plot{
-			margin-bottom: 0px;
-		}
-		/*TODO    select child elements more efficently*/
-		.plot {
-			border: solid black 2px;
-			height: 75px;
-		}
-
-		.plot_inner_row {
-			border: 0px;
-		}
-  	</style>
+	</style>
 </head>
 <body>
-
+	<nav class="center-align">
+		<p>Current Games</p>
+	</nav>
+	<br>
 	<div class="container">
-		<ul class="collapsible" data-collapsible="accordion">
-			<li>
-				<div class="collapsible-header">
-					Lobby Name
-					<span class="new badge">4 slots open</span></div>
-				<div class="collapsible-body">
-					<p>Current Player</p>
+		<div class="row">
+			<div class="col s3">
+				<div class="blue game_div">
+					<h5>Cool People Only</h5>
+					<p style="font-size: 125%">Current Players:</p>
+					<p class="player">MilkMan24</p>
+					<p class="player">LuckyGuy13</p>
+					<p class="player">JoeShmoe</p>
+					<p class="player">Erik</p>
 				</div>
-			</li>
-			<li>
-				<div class="collapsible-header">
-					<h5>Lobby Name</h5>
-					<span class="new badge">4 slots open</span></div>
-				<div class="collapsible-body">
-					<h5>Current Player</h5>
+				
+			</div>
+			<div class="col s3">
+				<div class="blue game_div">
+					<h5>Cool People Suck</h5>
+					<p style="font-size: 125%">Current Players:</p>
+					<p class="player">MilkMan22</p>
 				</div>
-			</li>
-		</ul>
-	</div> 
-
-
-
+				
+			</div>
+			<div class="col s3">
+				<div class="blue game_div">
+					<h5>Henry's Lobby</h5>
+					<p style="font-size: 125%">Current Players:</p>
+					<p class="player">HenryTheHenry</p>
+					<p class="player">NotHenry</p>
+					<p class="player">StillNotHenry</p>
+					<p class="player">Erik</p>
+				</div>
+				
+			</div>
+			<div class="col s3">
+				<div class="blue game_div">
+					<h5>Cool People Only</h5>
+					<p style="font-size: 125%">Current Players:</p>
+					<p class="player">MilkMan24</p>
+					<p class="player">LuckyGuy13</p>
+					<p class="player">JoeShmoe</p>
+					<p class="player">Erik</p>
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+        
 	<script src="https://code.jquery.com/jquery.js"></script>
-<!-- 	<script type="text/javascript">
-		$(document).ready( function() {
-			$('.collapsible').collapsible();
-		});
+	<script type="text/javascript">
+		
 	</script>
- --></body>
+</body>
 </html>
