@@ -2,9 +2,9 @@
 <head>
 	<title>Current Games</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-	<style>
+	<style> 
 		.row {
-			padding: 15px;
+			padding: 12px;
 		}
 		.center-align > p {
 			font-size: 180%;
@@ -26,7 +26,7 @@
 	</nav>
 	<br>
 	<div class="container red lighten-3">
-		<div class="row">
+		<div class="row" style="margin: 0px">
 			<div class="col s3">
 				<div class="blue game_div z-depth-3">
 					<h5>Cool People Only</h5>
@@ -70,37 +70,78 @@
 				
 			</div>	
 		</div>
+
 		<div class="row">
-			<div class="col s3">
-				<div class="game_div purple">
-					thing
-				</div>
-			</div>
-			<div class="col s3">
-				<div class="game_div purple">
-					thing
-				</div>
-			</div>
-			<div class="col s3">
-				<div class="game_div purple">
-					thing
-				</div>
-			</div>
-			<div class="col s3">
-				<div class="game_div purple">
-					thing
-				</div>
-			</div>
+			<a class="waves-effect waves-light btn green accent-3">Create Lobby</a>
 		</div>
 		<div class="row">
-			<a class="waves-effect waves-light btn green">Create Lobby</a>
+			<div id="player_bank" class="col s4 offset-s1 yellow">
+				<h5>In Main Lobby</h5>
+				<div id="players"></div>
+			</div>
+			<div class="col s5 offset-s1 light-green accent-1">
+		       <form>
+		          <div class="row" style="margin: 0px">
+		             <div class="input-field col s6">
+		                <input placeholder="Username" id="first_name" type="text" class="validate">
+		          	 </div>
+		          	 <div class="input-field col s6">
+		            	<input  placeholder="password" id="password" type="text" class="validate">
+		          	 </div>
+		          </div>
+		          <a class="waves-effect waves-dark btn green accent-3">Register</a>
+		       </form>
+			</div>
 		</div>
 		
 	</div>
         
-	<script src="https://code.jquery.com/jquery.js"></script>
-	<script type="text/javascript">
-				
-	</script>
+	<script src="https://code.jquery.com/jquery.js"></script>		
+	<script src="https://www.gstatic.com/firebasejs/4.7.0/firebase.js"></script>
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyAJoEFrLqa_WPI4S6SeVRsVdPBlAAbZ5Eg",
+	    authDomain: "buy-game-d14de.firebaseapp.com",
+	    databaseURL: "https://buy-game-d14de.firebaseio.com",
+	    projectId: "buy-game-d14de",
+	    storageBucket: "buy-game-d14de.appspot.com",
+	    messagingSenderId: "356316304251"
+	  };
+	  firebase.initializeApp(config);
+	  
+	  var database = firebase.database();
+	  var players = [];
+
+	  database.ref().on('value', function(snapshot) {
+	  	console.log(snapshot.val());
+
+	  	players = snapshot.val().users;
+		
+		// Checks data from firebase db 
+		// TODO - err handle if cannot connect to db
+	  	if( players[0].name === "Jon" ) {
+	  		console.log("error");
+	  	} else {
+	  		display(players);
+	  	}
+	  	
+	  });
+
+	  function display(array) {
+	  	$("#players").empty();
+
+	  	$(array).each( function(i) {	
+	  		var p = $("<p>");
+	  		p.html(array[i]);
+	  		$("#players").append(p);	
+	  	});
+	  }
+
+	  $(document).ready(function() {
+
+	  });
+	</script>	
+
 </body>
 </html>
