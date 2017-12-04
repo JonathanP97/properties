@@ -24,10 +24,15 @@
 		}
 		.material-icons{
 			float: right;	
-			background-color: grey;
 		}
 		#current_user {
 			padding-right: 0px;
+		}
+		.btn-small {
+			float: right;
+			height: 24px;
+		    line-height: 24px;
+		    padding: 0 0.5rem;
 		}
 	</style>
 </head>
@@ -91,7 +96,7 @@
 				<div id="players"></div>
 			</div>
 			<div id="current_user" class="col s5 offset-s1 light-green accent-1">
-		       <form>
+		       <form class="form">
 		          <div class="row" style="margin: 0px">
 		             <div class="input-field col s6">
 		                <input placeholder="Username" id="user_name" type="text" class="validate">
@@ -162,7 +167,7 @@
 
 	  function checkStorage() {
 	  	console.log(sessionStorage);
-	  	if( typeof(sessionStorage) !== "undefined") displayAccount();
+	  	if( typeof(sessionStorage.username) !== "undefined") displayAccount();
 	  }
 
 	  function getData(name, callBack) {
@@ -205,15 +210,20 @@
 	  }
 
 	  function displayAccount() {
-	  	$("#current_user").empty();
+	  	$(".form").hide();
+	  	var user_box = $("<div id='user'>")
+
 	  	var name = $("<h5 class='header'>").html(sessionStorage.username);
-	  	var icon = $("<i class='material-icons header'>clear</i>");
+	  	var icon = $("<a class='btn-small btn'><i id='sign-out' class='material-icons header'>clear</i></a>");
 	  	var totalGames = $("<p>").html("Games Completed: "  + sessionStorage.completed_games);
 	  	var gamesWon = $("<p>").html("Games won: " + sessionStorage.games_won);
-	  	$("#current_user").append(name);
-	  	$("#current_user").append(icon);
-	  	$("#current_user").append(totalGames);
-	  	$("#current_user").append(gamesWon);
+
+	  	user_box.append(name);
+	  	user_box.append(icon);
+	  	user_box.append(totalGames);
+	  	user_box.append(gamesWon);
+
+	  	$("#current_user").append(user_box);
 	  }
 
 	  function saveSession(user) {
@@ -223,6 +233,7 @@
 
 	  	players.push(user.username);
 	  	database.ref('online_users').set(players);
+	  	displayAccount();
 	  }
 
 	  $(document).ready(function() {
@@ -234,6 +245,26 @@
 	  		// console.log(userName);
 
 	  		signIn(userName, userPass);
+	  	});
+
+	  	$("#sign-out").on("click", function() {
+	  		console.log(players);
+	  		console.log("thing");
+	  		var newArray = [];
+	  		for(var i=0; i<players.length; i++) {
+	  		  if(sessionStorage.username !== players[i]) {
+	  		  	newArray[i] = players[i]
+	  		  }
+	  		}
+	  		players = newArray;
+	  		sessionStorage.removeItem("completed_games");
+	  		sessionStorage.removeItem("games_won");
+	  		sessionStorage.removeItem("username");
+
+	  		database.ref('online_users').set(players);
+	  		$("#user").empty();
+	  		$(".form").show();
+	  		display(players);
 	  	});
 	  });
 	</script>	
