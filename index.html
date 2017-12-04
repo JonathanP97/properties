@@ -2,12 +2,13 @@
 <head>
 	<title>Current Games</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style> 
 		.row {
 			padding: 12px;
-		}
+		}  
 		.center-align > p {
-			font-size: 180%;
+			font-size: 180%; 
 		}
 		.game_div {
 			padding: 3px;
@@ -17,6 +18,16 @@
 		}
 		.player {
 			font-size: 70%;
+		}
+		.header {
+			display: inline;
+		}
+		.material-icons{
+			float: right;	
+			background-color: grey;
+		}
+		#current_user {
+			padding-right: 0px;
 		}
 	</style>
 </head>
@@ -79,17 +90,17 @@
 				<h5>In Main Lobby</h5>
 				<div id="players"></div>
 			</div>
-			<div class="col s5 offset-s1 light-green accent-1">
+			<div id="current_user" class="col s5 offset-s1 light-green accent-1">
 		       <form>
 		          <div class="row" style="margin: 0px">
 		             <div class="input-field col s6">
-		                <input placeholder="Username" id="first_name" type="text" class="validate">
+		                <input placeholder="Username" id="user_name" type="text" class="validate">
 		          	 </div>
 		          	 <div class="input-field col s6">
-		            	<input  placeholder="password" id="password" type="text" class="validate">
+		            	<input  placeholder="Password" id="user_pass" type="text" class="validate">
 		          	 </div>
 		          </div>
-		          <a class="waves-effect waves-dark btn green accent-3">Register</a>
+		          <a id="sign-in" class="waves-effect waves-dark btn green accent-3">Register</a>
 		       </form>
 			</div>
 		</div>
@@ -111,19 +122,22 @@
 	  firebase.initializeApp(config);
 	  
 	  var database = firebase.database();
+	  checkStorage();
 	  var players = [];
 
 	  database.ref().on('value', function(snapshot) {
 	  	console.log(snapshot.val());
 
-	  	players = snapshot.val().users;
+	  	players = snapshot.val().online_users;
 		
 		// Checks data from firebase db 
 		// TODO - err handle if cannot connect to db
-	  	if( players[0].name === "Jon" ) {
-	  		console.log("error");
-	  	} else {
+		console.log(players);
+	  	if( players !== undefined) {
 	  		display(players);
+	  	} else {
+	  		players = [];
+	  		// noConnectionDisplay();
 	  	}
 	  	
 	  });
@@ -138,8 +152,89 @@
 	  	});
 	  }
 
-	  $(document).ready(function() {
+	  function noConnectionDisplay() {
+	  	$("#players").empty();
 
+	  	var txt = $("<p>");
+	  	txt.html("Lost connection to database");
+	  	$("#players").append(txt);
+	  }
+
+	  function checkStorage() {
+	  	console.log(sessionStorage);
+	  	if( typeof(sessionStorage) !== "undefined") displayAccount();
+	  }
+
+	  function getData(name, callBack) {
+	  	database.ref('users/' + name).once('value').then(function(snapshot) {
+	  		var obj = snapshot.val();
+	  		callBack(obj);
+	  	})
+	  }
+
+	  function signIn(name, pass) {
+	  	/* two routes
+	  		check if entered username is already in db
+	  			if no, insert into user/pass into db
+
+	  			if yes, check if user/pass is correct 
+	  				then sign in append to online player 	*/
+
+	  	getData(name, function(data) {
+	  		console.log(data);
+
+	  		if (data === null) firebaseSet(name, pass);
+			else if(name === data.username && pass === data.password) {
+	  			saveSession(data);
+	  		} 
+	  	});
+	  }
+
+	  // inserts new users to database with starting stats
+	  function firebaseSet(name, pass) {
+	  	database.ref('users/' + name).set({
+	  	  username: name,
+	  	  password: pass,
+	  	  completed_games: 0,
+	  	  games_won: 0
+	  	});
+
+	  	getData(name, function(data){
+	  		saveSession(data);
+	  	});  	
+	  }
+
+	  function displayAccount() {
+	  	$("#current_user").empty();
+	  	var name = $("<h5 class='header'>").html(sessionStorage.username);
+	  	var icon = $("<i class='material-icons header'>clear</i>");
+	  	var totalGames = $("<p>").html("Games Completed: "  + sessionStorage.completed_games);
+	  	var gamesWon = $("<p>").html("Games won: " + sessionStorage.games_won);
+	  	$("#current_user").append(name);
+	  	$("#current_user").append(icon);
+	  	$("#current_user").append(totalGames);
+	  	$("#current_user").append(gamesWon);
+	  }
+
+	  function saveSession(user) {
+	  	sessionStorage.username = user.username;
+	  	sessionStorage.completed_games = user.completed_games;
+	  	sessionStorage.games_won = user.games_won; 
+
+	  	players.push(user.username);
+	  	database.ref('online_users').set(players);
+	  }
+
+	  $(document).ready(function() {
+	  	$("#sign-in").on("click", function() {
+	  		event.preventDefault();
+
+	  		var userName = $("#user_name").val().trim();
+	  		var userPass = $("#user_pass").val();
+	  		// console.log(userName);
+
+	  		signIn(userName, userPass);
+	  	});
 	  });
 	</script>	
 
