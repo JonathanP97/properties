@@ -46,7 +46,7 @@
 			<div class="col s3">
 				<div class="blue game_div z-depth-3">
 					<h5>Cool People Only</h5>
-					<p style="font-size: 125%">Current Players:</p>
+					<p style=>Current Players:</p>
 					<p class="player">MilkMan24</p>
 					<p class="player">LuckyGuy13</p>
 					<p class="player">JoeShmoe</p>
@@ -72,7 +72,6 @@
 					<p class="player">Erik</p>
 					<p class="player">Guy123</p>
 				</div>
-				
 			</div>
 			<div class="col s3">
 				<div class="blue game_div">
@@ -80,8 +79,6 @@
 					<p style="font-size: 125%">Current Players:</p>
 					<p class="player">MilkMan24</p>
 					<p class="player">LuckyGuy13</p>
-					<p class="player">JoeShmoe</p>
-					<p class="player">Erik</p>
 				</div>
 				
 			</div>	
@@ -129,25 +126,32 @@
 	  var database = firebase.database();
 	  checkStorage();
 	  var players = [];
+	  var lobbies = [];
 
 	  database.ref().on('value', function(snapshot) {
 	  	console.log(snapshot.val());
 
 	  	players = snapshot.val().online_users;
-		
+		lobbies = snapshot.val().lobbies;
+
 		// Checks data from firebase db 
 		// TODO - err handle if cannot connect to db
 		console.log(players);
 	  	if( players !== undefined) {
-	  		display(players);
+	  		displayUsers(players);
 	  	} else {
 	  		players = [];
 	  		// noConnectionDisplay();
 	  	}
 	  	
+	  	if(lobbies !== undefined) {
+	  		displayLobbies(lobbies)
+	  	} else {
+	  		lobbies = [];
+	  	}
 	  });
 
-	  function display(array) {
+	  function displayUsers(array) {
 	  	$("#players").empty();
 
 	  	$(array).each( function(i) {	
@@ -155,6 +159,29 @@
 	  		p.html(array[i]);
 	  		$("#players").append(p);	
 	  	});
+	  }
+
+	  function displayLobbies(array) {
+	  	$("#lobbies").empty();
+	  	var limit = Math.ceil(lobbies.length/4)
+
+	  	for(var i=0; i<limit; i++) {
+	  		var row = $("<div class='row'>");
+	  		for(var x=0; x<4; x++) {
+	  			var column = $("<div class='col s3'>");
+	  			var gameDiv = $("<div class='game_div z-depth-2'>")
+	  			var lobbyTitle = $("<h5>").html(array[i].title);
+	  			
+	  			gameDiv.append(lobbyTitle);
+
+	  			for(var y=0; y<array[i].players.length; y++) {
+	  				gameDiv.append( $("<p>").html(array[i].players[y]) );
+	  			}
+	  			column.append(gameDiv);
+	  			row.append(column);
+	  		}
+	  	};
+
 	  }
 
 	  function noConnectionDisplay() {
@@ -218,10 +245,14 @@
 	  	var totalGames = $("<p>").html("Games Completed: "  + sessionStorage.completed_games);
 	  	var gamesWon = $("<p>").html("Games won: " + sessionStorage.games_won);
 
-	  	user_box.append(name);
-	  	user_box.append(icon);
-	  	user_box.append(totalGames);
-	  	user_box.append(gamesWon);
+	  	[
+	  		name,
+	  		icon,
+	  		totalGames,
+	  		gamesWon
+	  	].forEach(function(ele) {
+	  		user_box.append(ele);
+	  	});
 
 	  	$("#current_user").append(user_box);
 	  }
@@ -264,7 +295,7 @@
 	  		database.ref('online_users').set(players);
 	  		$("#user").empty();
 	  		$(".form").show();
-	  		display(players);
+	  		displayUsers(players);
 	  	});
 	  });
 	</script>	
