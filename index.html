@@ -45,27 +45,34 @@
 			width: 250px;
 			margin-left: auto;
 			margin-right: auto;
+			padding: 6px;
 		}
 
 		#sign-in {
 			margin-left: 70px;
+		}
+		
+		.lobby > * {
+			
 		}
 
 		.lobb {
 			display: inline-block;
 			padding: 5px;
 			width: 20%;
-			margin: 2%;
+			margin: 1.5%;
+			background: linear-gradient(to bottom right, yellow, red);
 		}
 
-		.lobb > h5 {
-			margin-top: 0;
+		.lobb > p,h5 {
+			margin-top: 0px;
+			margin-bottom: 10px;
 		}
 	</style>
 </head>
 <body>  
 	<div class="container">
-		<div class="main center blue">
+		<div class="main center blue accent-4">
 			<br><h3>Prop Game</h3><br>
 			<div>
 				<a id="button_create" class="waves-effect red waves-light btn-large">Create Lobby</a>
@@ -75,7 +82,7 @@
 			<br>
 		</div>
 		<br>
-		<div class="auth black lighten-5">
+		<div class="auth indigo accent-3">
 	       <form class="form ">
 	          	<div class="row" style="margin: 0px">
 	              <div class="input-field col s12">
@@ -93,7 +100,7 @@
 	       </form>
 		</div>
 		
-		<div class="lobby green">
+		<div class="lobby">
 			<h4>Lobbies</h4>
 			<div class="lobbies_container">
 				<p>lobbies display here from firebase</p>
@@ -138,15 +145,17 @@
 	  		displayLobbies();
 	  	});
 
-		$('.auth').hide();
-		$('.lobby').hide();
+		$('.auth').hide();	
 		$('.pass').hide();
+		// $('.lobby').hide();
+
+		// Events
+		// $('#button_join').on('click', function() {
+			// 	$('.lobby').show();
+		// })
+
 		$('#button_create').on('click', function() {
 			$('.auth').show();
-		})
-
-		$('#button_join').on('click', function() {
-			$('.lobby').show();
 		})
 
 		// toggle function for password input
@@ -160,6 +169,13 @@
 			}
 			console.log(isPrivate);
 		});
+		$(document).ready(function() {
+			$('.lobb').on('click', function() {
+				console.log(this.id);
+			})
+		})
+		
+
 
 		$('form').on('submit', function(event) {
 			event.preventDefault();
@@ -196,9 +212,9 @@
 			for(lobb in lobbies) {
 				database.ref('lobbies/' + lobb).once('value').then(function(snapshot) {
 					console.log(snapshot.val())
-					var div = $("<div class='lobb purple accent-2'>");
+					var div = $("<div id="+ snapshot.val().id +" class='lobb'>");
 					var text = $("<h5>" + snapshot.val().host + "</h5>");
-					var players = $("<p>" + snapshot.val().players.length + "</p>");
+					var players = $("<p>Players:" + snapshot.val().players.length + "</p>");
 					
 					var str;
 					if(snapshot.val().private === true) {
