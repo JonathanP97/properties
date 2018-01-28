@@ -130,20 +130,27 @@
 			<br>
 		</div>
 		<br>
-		<div class="auth blue accent-3">
+		<div class="auth">
 	       <form class="form">
-	          <div class="row" style="margin: 0px">
-	             <div class="input-field col s12">
-	                <input placeholder="display name" id="user_name" type="text" class="validate">
-	          	 </div>
-	          </div>
-	          <a id="sign-in" class="waves-effect red waves-light btn">continue</a><br><br>
+	          	<div class="row" style="margin: 0px">
+	              <div class="input-field col s12">
+	              	<input placeholder="display name" id="name" type="text" class="validate">
+	          	  </div>
+	          	  <div class="input-field col s12 pass">
+	              	<input placeholder="lobby password" id="lobby_password" type="text" class="validate">
+	          	  </div>
+	          	</div>
+	          	<p>
+      			  <input name="group1" type="checkbox" id="game_type"/>
+      			  <label for="game_type">Private Game?</label>
+    			</p>
+			    <button id="sign-in" class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
 	       </form>
 		</div>
 		
 		<div class="lobby green">
 			<h4>Lobbies</h4>
-			<div>
+			<div class="lobbies_container">
 				<p>lobbies display here from firebase</p>
 			</div>
 		</div>
@@ -164,29 +171,87 @@
 		};
 	  	firebase.initializeApp(config);
 	  	var database = firebase.database(),
+	  		isPrivate = false,
 	  		lobbies = [];
 
-	  	database.ref().on('value', function(data) {
+	  	database.ref('users/').on('value', function(data) {
 		  	console.log(data.val());
-
 		  	var dbUsers = data.val().users;
-			var dbLobby = data.val().lobbies;
 			
 		  	if(dbUsers === undefined) dbUsers = [];
-		  	if(dbLobby === undefined) dbLobby = [];
+	  	});
+
+	  	database.ref('lobbies/').on('value', function(data) {
+		  	// console.log(data.val());
+
+			var dbLobby = data.val();
+			
+		  	if(dbLobby === undefined) {
+		  		dbLobby = [];
+	  		} else lobbies = dbLobby;
+	  		console.log(lobbies);
+	  		displayLobbies();
 	  	});
 
 		$('.auth').hide();
 		$('.lobby').hide();
+		$('.pass').hide();
 		$('#button_create').on('click', function() {
-			console.log("create");
 			$('.auth').show();
 		})
 
 		$('#button_join').on('click', function() {
-			console.log("join");
+			displayLobbies();
 			$('.lobby').show();
 		})
+
+		// toggle function for password input
+		$('#game_type').on('click', function() {
+			if(isPrivate) {
+				isPrivate = false;
+				$('.pass').hide();
+			} else {
+				isPrivate = true;
+				$('.pass').show();
+			}
+			console.log(isPrivate);
+		});
+
+		$('form').on('submit', function(event) {
+			event.preventDefault();
+			var nameInput = $('#name').val().trim();
+			var passInput = $('#lobby_password').val();
+			
+			var lobbyId = getId(nameInput.charAt(0));
+			var tempArr = [nameInput];
+
+			// sets new lobby to firebase
+			database.ref('lobbies/' + lobbyId).set({
+				host: nameInput,
+				private: isPrivate,
+				password: passInput,
+				players: tempArr
+			})
+		});
+
+		//creates string of random chars for firebase queries
+		function getId(char) {
+			var bank = "abcdefghijklmnopqrstuvwxyz123456789";
+			var id = char;
+			for(var i=0;i<6; i++) {
+				var rando = Math.floor((Math.random() * bank.length));
+				id += bank[rando];
+			}
+			return id
+		}
+
+		function displayLobbies() {
+			console.log('hi')
+			$('.lobbies_container').empty();
+			for(var i=0; i<lobbies.length; i++) {
+				console.log('yes');
+			}
+		}
 	</script>
 
 
@@ -199,7 +264,7 @@
 	  		p.html(array[i]);
 	  		$("#players").append(p);	
 	  	});
-	  }
+	  } 	
 
 	  function displayLobbies(array) {
 	  	$("#lobbies").empty();
