@@ -1,9 +1,9 @@
 <html>
 <head>
-	<title>Current Games</title>
+	<title>Landing</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 	  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<style> 
+	<!-- <style> 
 		.row {
 			padding: 12px;
 		}  
@@ -34,14 +34,26 @@
 		    line-height: 24px;
 		    padding: 0 0.5rem;
 		}
+	</style> -->
+	<style type="text/css">
+		.main {
+			width: 60%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.auth {
+			width: 250px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		#sign-in {
+			margin-left: 60px;
+		}
 	</style>
 </head>
 <body>
-	<nav class="center-align">
-		<p>Current Games</p>
-	</nav>
-	<br>
-	<div class="container red lighten-3">
+<!-- <div class="container red lighten-3">
 		<div class="row" style="margin: 0px">
 			<div class="col s3">
 				<div class="blue game_div z-depth-3">
@@ -106,51 +118,79 @@
 		       </form>
 			</div>
 		</div>
+	</div>-->      
+	<div class="container">
+		<div class="main center blue">
+			<br><h3>Prop Game</h3><br>
+			<div>
+				<a id="button_create" class="waves-effect red waves-light btn-large">Create Lobby</a>
+				<br><br>
+				<a id="button_join" class="waves-effect red waves-light btn-large">Join</a>
+			</div>
+			<br>
+		</div>
+		<br>
+		<div class="auth blue accent-3">
+	       <form class="form">
+	          <div class="row" style="margin: 0px">
+	             <div class="input-field col s12">
+	                <input placeholder="display name" id="user_name" type="text" class="validate">
+	          	 </div>
+	          </div>
+	          <a id="sign-in" class="waves-effect red waves-light btn">continue</a><br><br>
+	       </form>
+		</div>
 		
+		<div class="lobby green">
+			<h4>Lobbies</h4>
+			<div>
+				<p>lobbies display here from firebase</p>
+			</div>
+		</div>
 	</div>
-        
+
+
 	<script src="https://code.jquery.com/jquery.js"></script>		
 	<script src="https://www.gstatic.com/firebasejs/4.7.0/firebase.js"></script>
-	<script>
-	  // Initialize Firebase
-	  var config = {
-	    apiKey: "AIzaSyAJoEFrLqa_WPI4S6SeVRsVdPBlAAbZ5Eg",
-	    authDomain: "buy-game-d14de.firebaseapp.com",
-	    databaseURL: "https://buy-game-d14de.firebaseio.com",
-	    projectId: "buy-game-d14de",
-	    storageBucket: "buy-game-d14de.appspot.com",
-	    messagingSenderId: "356316304251"
-	  };
-	  firebase.initializeApp(config);
-	  
-	  var database = firebase.database();
-	  checkStorage();
-	  var players = [];
-	  var lobbies = [];
 
-	  database.ref().on('value', function(snapshot) {
-	  	console.log(snapshot.val());
-
-	  	players = snapshot.val().online_users;
-		lobbies = snapshot.val().lobbies;
-
-		// Checks data from firebase db 
-		// TODO - err handle if cannot connect to db
-		console.log(players);
-	  	if( players !== undefined) {
-	  		displayUsers(players);
-	  	} else {
-	  		players = [];
-	  		// noConnectionDisplay();
-	  	}
-	  	
-	  	if(lobbies !== undefined) {
-	  		displayLobbies(lobbies)
-	  	} else {
+	<script type="text/javascript">
+		var config = {
+		    apiKey: "AIzaSyAJoEFrLqa_WPI4S6SeVRsVdPBlAAbZ5Eg",
+		    authDomain: "buy-game-d14de.firebaseapp.com",
+		    databaseURL: "https://buy-game-d14de.firebaseio.com",
+		    projectId: "buy-game-d14de",
+		    storageBucket: "buy-game-d14de.appspot.com",
+		    messagingSenderId: "356316304251"
+		};
+	  	firebase.initializeApp(config);
+	  	var database = firebase.database(),
 	  		lobbies = [];
-	  	}
-	  });
 
+	  	database.ref().on('value', function(data) {
+		  	console.log(data.val());
+
+		  	var dbUsers = data.val().users;
+			var dbLobby = data.val().lobbies;
+			
+		  	if(dbUsers === undefined) dbUsers = [];
+		  	if(dbLobby === undefined) dbLobby = [];
+	  	});
+
+		$('.auth').hide();
+		$('.lobby').hide();
+		$('#button_create').on('click', function() {
+			console.log("create");
+			$('.auth').show();
+		})
+
+		$('#button_join').on('click', function() {
+			console.log("join");
+			$('.lobby').show();
+		})
+	</script>
+
+
+	<!-- <script>
 	  function displayUsers(array) {
 	  	$("#players").empty();
 
@@ -298,7 +338,7 @@
 	  		displayUsers(players);
 	  	});
 	  });
-	</script>	
+	</script>	 -->
 
 </body>
 </html>
