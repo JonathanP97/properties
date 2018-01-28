@@ -48,77 +48,22 @@
 		}
 
 		#sign-in {
-			margin-left: 60px;
+			margin-left: 70px;
+		}
+
+		.lobb {
+			display: inline-block;
+			padding: 5px;
+			width: 20%;
+			margin: 2%;
+		}
+
+		.lobb > h5 {
+			margin-top: 0;
 		}
 	</style>
 </head>
-<body>
-<!-- <div class="container red lighten-3">
-		<div class="row" style="margin: 0px">
-			<div class="col s3">
-				<div class="blue game_div z-depth-3">
-					<h5>Cool People Only</h5>
-					<p style=>Current Players:</p>
-					<p class="player">MilkMan24</p>
-					<p class="player">LuckyGuy13</p>
-					<p class="player">JoeShmoe</p>
-					<p class="player">Erik</p>
-				</div>
-				
-			</div>
-			<div class="col s3">
-				<div class="blue game_div z-depth-2">
-					<h5>Cool People Suck</h5>
-					<p style="font-size: 125%">Current Players:</p>
-					<p class="player">MilkMan22</p>
-				</div>
-				
-			</div>
-			<div class="col s3">
-				<div class="blue game_div">
-					<h5>Henry's Lobby</h5>
-					<p style="font-size: 125%">Current Players:</p>
-					<p class="player">HenryTheHenry</p>
-					<p class="player">NotHenry</p>
-					<p class="player">StillNotHenry</p>
-					<p class="player">Erik</p>
-					<p class="player">Guy123</p>
-				</div>
-			</div>
-			<div class="col s3">
-				<div class="blue game_div">
-					<h5>Cool People Only</h5>
-					<p style="font-size: 125%">Current Players:</p>
-					<p class="player">MilkMan24</p>
-					<p class="player">LuckyGuy13</p>
-				</div>
-				
-			</div>	
-		</div>
-
-		<div class="row">
-			<a class="waves-effect waves-light btn green accent-3">Create Lobby</a>
-		</div>
-		<div class="row">
-			<div id="player_bank" class="col s4 offset-s1 yellow">
-				<h5>In Main Lobby</h5>
-				<div id="players"></div>
-			</div>
-			<div id="current_user" class="col s5 offset-s1 light-green accent-1">
-		       <form class="form">
-		          <div class="row" style="margin: 0px">
-		             <div class="input-field col s6">
-		                <input placeholder="Username" id="user_name" type="text" class="validate">
-		          	 </div>
-		          	 <div class="input-field col s6">
-		            	<input  placeholder="Password" id="user_pass" type="text" class="validate">
-		          	 </div>
-		          </div>
-		          <a id="sign-in" class="waves-effect waves-dark btn green accent-3">Register</a>
-		       </form>
-			</div>
-		</div>
-	</div>-->      
+<body>  
 	<div class="container">
 		<div class="main center blue">
 			<br><h3>Prop Game</h3><br>
@@ -130,8 +75,8 @@
 			<br>
 		</div>
 		<br>
-		<div class="auth">
-	       <form class="form">
+		<div class="auth black lighten-5">
+	       <form class="form ">
 	          	<div class="row" style="margin: 0px">
 	              <div class="input-field col s12">
 	              	<input placeholder="display name" id="name" type="text" class="validate">
@@ -201,7 +146,6 @@
 		})
 
 		$('#button_join').on('click', function() {
-			displayLobbies();
 			$('.lobby').show();
 		})
 
@@ -225,13 +169,13 @@
 			var lobbyId = getId(nameInput.charAt(0));
 			var tempArr = [nameInput];
 
-			// sets new lobby to firebase
 			database.ref('lobbies/' + lobbyId).set({
-				host: nameInput,
-				private: isPrivate,
-				password: passInput,
-				players: tempArr
-			})
+			  id: lobbyId,
+			  host: nameInput,
+			  private: isPrivate,
+			  password: passInput,
+			  players: tempArr
+			});
 		});
 
 		//creates string of random chars for firebase queries
@@ -246,10 +190,29 @@
 		}
 
 		function displayLobbies() {
-			console.log('hi')
+			var tempArr = []
 			$('.lobbies_container').empty();
-			for(var i=0; i<lobbies.length; i++) {
-				console.log('yes');
+			
+			for(lobb in lobbies) {
+				database.ref('lobbies/' + lobb).once('value').then(function(snapshot) {
+					console.log(snapshot.val())
+					var div = $("<div class='lobb purple accent-2'>");
+					var text = $("<h5>" + snapshot.val().host + "</h5>");
+					var players = $("<p>" + snapshot.val().players.length + "</p>");
+					
+					var str;
+					if(snapshot.val().private === true) {
+						str = "Private Game";
+					} else {
+						str = "Public";
+					}
+					var locked = $("<p>" + str + "</p>");
+					
+					div.append(text);
+					div.append(players);
+					div.append(locked);
+					$('.lobbies_container').append(div);
+				})
 			}
 		}
 	</script>
