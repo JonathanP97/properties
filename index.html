@@ -56,7 +56,7 @@
 			
 		}
 
-		.lobb {
+		.game {
 			display: inline-block;
 			padding: 5px;
 			width: 20%;
@@ -64,7 +64,7 @@
 			background: linear-gradient(to bottom right, yellow, red);
 		}
 
-		.lobb > p,h5 {
+		.game > p,h5 {
 			margin-top: 0px;
 			margin-bottom: 10px;
 		}
@@ -169,13 +169,10 @@
 			}
 			console.log(isPrivate);
 		});
-		$(document).ready(function() {
-			$('.lobb').on('click', function() {
-				console.log(this.id);
-			})
-		})
-		
 
+		$(document).on('click', '.game', function(){
+    		console.log(this.id);
+		});
 
 		$('form').on('submit', function(event) {
 			event.preventDefault();
@@ -211,8 +208,8 @@
 			
 			for(lobb in lobbies) {
 				database.ref('lobbies/' + lobb).once('value').then(function(snapshot) {
-					console.log(snapshot.val())
-					var div = $("<div id="+ snapshot.val().id +" class='lobb'>");
+					// console.log(snapshot.val())
+					var div = $("<div id="+ snapshot.val().id +" class='game'>");
 					var text = $("<h5>" + snapshot.val().host + "</h5>");
 					var players = $("<p>Players:" + snapshot.val().players.length + "</p>");
 					
@@ -230,6 +227,7 @@
 					$('.lobbies_container').append(div);
 				})
 			}
+
 		}
 	</script>
 
